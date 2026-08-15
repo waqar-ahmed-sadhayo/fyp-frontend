@@ -5,6 +5,21 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Multi-Disease Detection System</title>
+    <script>
+      // Stamp the theme before React mounts / CSS paints, so an explicit
+      // saved choice (e.g. dark, on a light-OS machine) doesn't flash the
+      // wrong theme for a frame. No stored choice = no attribute here,
+      // which leaves it to the prefers-color-scheme media query in
+      // styles.css (the "system" state) — see ThemeContext.jsx.
+      (function () {
+        try {
+          var saved = localStorage.getItem("mdds_theme");
+          if (saved === "light" || saved === "dark") {
+            document.documentElement.setAttribute("data-theme", saved);
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

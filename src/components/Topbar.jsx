@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 import { api } from "../api/client";
 import { DISEASE_META } from "../diseaseConfig";
 import {
-  BookOpenIcon, ClipboardIcon, HomeIcon, LogOutIcon, PulseIcon, SearchIcon, SendIcon, UserIcon,
+  ClipboardIcon, LogOutIcon, MoonIcon, SearchIcon, SunIcon, UserIcon,
 } from "./Icons";
 import logo from "../assets/logo.png";
 
@@ -13,7 +14,7 @@ function initials(name = "") {
   return ((parts[0]?.[0] || "") + (parts[1]?.[0] || "")).toUpperCase();
 }
 
-const navIconClass = ({ isActive }) => `icon-action${isActive ? " active" : ""}`;
+const navLinkClass = ({ isActive }) => `navbar-link${isActive ? " active" : ""}`;
 
 const SEARCHABLE = [
   ...Object.entries(DISEASE_META).map(([key, meta]) => ({
@@ -78,6 +79,7 @@ function HeaderSearch({ user, navigate }) {
 
 export default function Topbar() {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [historyCount, setHistoryCount] = useState(0);
@@ -94,30 +96,25 @@ export default function Topbar() {
           <img src={logo} alt="Multi-Disease Detection System" className="brand-logo" />
         </Link>
 
-        <nav className="nav-icons">
-          <NavLink to="/" end className={navIconClass} title="Home">
-            <HomeIcon />
-          </NavLink>
-          {user && (
-            <NavLink to="/dashboard" className={navIconClass} title="Screenings">
-              <PulseIcon />
-            </NavLink>
-          )}
-          <NavLink to="/education" className={navIconClass} title="Learn">
-            <BookOpenIcon />
-            <span className="new-dot" />
-          </NavLink>
-          {user && (
-            <NavLink to="/feedback" className={navIconClass} title="Feedback">
-              <SendIcon />
-            </NavLink>
-          )}
+        <nav className="navbar-links">
+          <NavLink to="/" end className={navLinkClass}>Home</NavLink>
+          {user && <NavLink to="/dashboard" className={navLinkClass}>Screenings</NavLink>}
+          <NavLink to="/education" className={navLinkClass}>Learn</NavLink>
+          {user && <NavLink to="/feedback" className={navLinkClass}>Feedback</NavLink>}
         </nav>
       </div>
 
       <HeaderSearch user={user} navigate={navigate} />
 
       <div className="topbar-actions">
+        <button
+          type="button"
+          className="icon-action"
+          title={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+          onClick={toggleTheme}
+        >
+          {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+        </button>
         {user ? (
           <>
             <Link to="/history" className="icon-action" title="Screening history">
@@ -140,10 +137,14 @@ export default function Topbar() {
             </button>
           </>
         ) : (
-          <Link to="/login" className="icon-action-text">
-            <UserIcon />
-            <span>Sign in / Register</span>
-          </Link>
+          <>
+            <Link to="/login" className="navbar-link topbar-signin-link">
+              Sign in
+            </Link>
+            <Link to="/register" className="btn btn-primary">
+              <UserIcon width={15} height={15} /> Register
+            </Link>
+          </>
         )}
       </div>
     </header>

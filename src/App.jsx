@@ -1,8 +1,10 @@
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import Topbar from "./components/Topbar";
+import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardShell from "./components/DashboardShell";
 import { AuthProvider } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -52,12 +54,7 @@ function AppShell() {
           </Route>
         </Routes>
       </main>
-      {!hideFooter && (
-        <p className="footer-note">
-          Multi-Disease Detection System — Final Year Project — Educational use
-          only
-        </p>
-      )}
+      {!hideFooter && <Footer />}
     </div>
   );
 }
@@ -65,9 +62,11 @@ function AppShell() {
 export default function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <AppShell />
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <AppShell />
+        </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }

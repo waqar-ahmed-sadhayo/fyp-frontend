@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { api } from "../api/client";
 import { DISEASE_META } from "../diseaseConfig";
 import ScreeningCard from "../components/ScreeningCard";
-import heroImage from "../assets/hero.png";
+import DashboardPreview from "../components/DashboardPreview";
 import {
   ArrowRightIcon,
   BadgeCheckIcon,
@@ -56,6 +56,16 @@ const STEPS = [
   },
 ];
 
+const TEAM = [
+  { name: "Haroon Rasheed", rollNo: "BSE-22F-071" },
+  { name: "Waqar Ahmed", rollNo: "BSE-22F-076" },
+];
+
+function initials(name) {
+  const parts = name.trim().split(/\s+/);
+  return ((parts[0]?.[0] || "") + (parts[1]?.[0] || "")).toUpperCase();
+}
+
 const FAQS = [
   {
     q: "Is this a medical diagnosis?",
@@ -105,10 +115,7 @@ export default function Landing() {
 
   return (
     <>
-      <div
-        className="hero-banner"
-        style={{ backgroundImage: `url(${heroImage})` }}
-      >
+      <div className="hero-banner">
         <div className="hero-banner-inner">
           <section className="hero">
             <div className="hero-content">
@@ -118,27 +125,13 @@ export default function Landing() {
               <h1>
                 Smart Detection,
                 <br />
-                <span style={{ color: "var(--brand)" }}>Better Awareness.</span>
+                <span style={{ color: "var(--cta-dark)" }}>Better Awareness.</span>
               </h1>
               <p className="lede">
                 Multi-Disease Detection System uses trained AI models to screen
                 your lab panel and support early awareness — for heart disease,
                 diabetes, breast cancer, kidney disease and liver disease.
               </p>
-
-              <div className="hero-feature-row">
-                {HERO_FEATURES.map((f) => (
-                  <div className="hf-item" key={f.title}>
-                    <span className="hf-icon">
-                      <f.icon />
-                    </span>
-                    <div>
-                      <h5>{f.title}</h5>
-                      <p>{f.sub}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
 
               <div className="hero-actions">
                 <Link
@@ -153,22 +146,35 @@ export default function Landing() {
                 </a>
               </div>
 
-              <div className="hero-stat-line">
-                <span className="icon-stack">
-                  {Object.entries(DISEASE_META).map(([key, meta]) => (
-                    <span
-                      key={key}
-                      style={{ background: meta.color, color: "#fff" }}
-                    >
-                      <DiseaseIcon disease={key} width={13} height={13} />
-                    </span>
-                  ))}
+              <div className="trust-row">
+                <span className="trust-row-item">
+                  <ShieldIcon /> Private &amp; encrypted data
                 </span>
-                <p>
-                  <b>5 screenings</b>, each validated on a public clinical
-                  dataset
-                </p>
+                <span className="trust-row-item">
+                  <DatabaseIcon /> Trained on verified public clinical datasets
+                </span>
+                <span className="trust-row-item">
+                  <LayersIcon /> 5 conditions, one account
+                </span>
               </div>
+
+              <div className="hero-feature-row">
+                {HERO_FEATURES.map((f) => (
+                  <div className="hf-item" key={f.title}>
+                    <span className="hf-icon">
+                      <f.icon />
+                    </span>
+                    <div>
+                      <h5>{f.title}</h5>
+                      <p>{f.sub}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="hero-visual">
+              <DashboardPreview />
             </div>
           </section>
 
@@ -578,6 +584,27 @@ export default function Landing() {
           </div>
         </div>
 
+        {/* ---- team ---- */}
+        <section className="landing-section">
+          <div className="section-head">
+            <div>
+              <p className="eyebrow">Team</p>
+              <h2>Built by</h2>
+            </div>
+          </div>
+          <div className="team-grid">
+            {TEAM.map((m) => (
+              <div className="team-card" key={m.rollNo}>
+                <span className="team-avatar">{initials(m.name)}</span>
+                <div>
+                  <div className="team-name">{m.name}</div>
+                  <div className="team-roll">{m.rollNo}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* ---- faq ---- */}
         <section className="landing-section">
           <div className="section-head">
@@ -604,7 +631,7 @@ export default function Landing() {
               : "Create an account and run your first screening"}
           </h2>
           <p>Free, educational, and takes under a minute to get a result.</p>
-          <div className="hero-actions" style={{ justifyContent: "center" }}>
+          <div className="hero-actions on-dark" style={{ justifyContent: "center" }}>
             <Link
               to={user ? "/dashboard" : "/register"}
               className="btn btn-primary"
