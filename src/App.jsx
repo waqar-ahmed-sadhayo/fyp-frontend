@@ -16,6 +16,7 @@ import History from "./pages/History";
 import Profile from "./pages/Profile";
 import Education from "./pages/Education";
 import Feedback from "./pages/Feedback";
+import Admin from "./pages/Admin";
 
 function AppShell() {
   const location = useLocation();
@@ -51,6 +52,7 @@ function AppShell() {
             <Route path="/history" element={<History />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/feedback" element={<Feedback />} />
+            <Route path="/admin" element={<Admin />} />
           </Route>
         </Routes>
       </main>

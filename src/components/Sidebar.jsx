@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { DISEASE_META } from "../diseaseConfig";
 import { useAuth } from "../context/AuthContext";
-import { ClipboardIcon, DiseaseIcon, HomeIcon, SendIcon } from "./Icons";
+import { ClipboardIcon, DiseaseIcon, HomeIcon, SendIcon, ShieldIcon } from "./Icons";
 
 function initials(name = "") {
   const parts = name.trim().split(/\s+/);
@@ -62,6 +62,20 @@ export default function Sidebar() {
             </NavLink>
           </nav>
         </div>
+
+        {user?.is_admin && (
+          <div className="sidebar-section">
+            <p className="sidebar-label">Admin</p>
+            <nav className="sidebar-nav">
+              <NavLink to="/admin" className={linkClass}>
+                <span className="sidebar-link-icon"><ShieldIcon /></span>
+                <span className="sidebar-link-text">
+                  <span className="sidebar-link-title">User accounts</span>
+                </span>
+              </NavLink>
+            </nav>
+          </div>
+        )}
       </div>
 
       {user && (

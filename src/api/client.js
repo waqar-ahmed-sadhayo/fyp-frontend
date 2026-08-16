@@ -157,6 +157,8 @@ export const api = {
   updateProfile: (payload) => request("/user/profile", { method: "PUT", body: payload }),
 
   submitFeedback: (payload) => request("/feedback", { method: "POST", body: payload }),
+
+  adminUsers: () => request("/admin/users"),
 };
 
 export { getToken, setTokens, clearTokens, setSessionExpiredHandler };
