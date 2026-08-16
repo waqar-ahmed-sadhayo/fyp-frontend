@@ -4,31 +4,35 @@
 // Colors are deliberately desaturated to sit in the same quiet register as
 // the rest of the palette (see styles.css's Panel Indigo system) — they're
 // here for wayfinding across 5 services, not as decorative brand accents.
+// Referenced as CSS custom properties (not literal hex) because each has a
+// separate, lighter dark-mode value defined in styles.css — a literal hex
+// here would keep the light-mode tone in dark mode and drop under 3:1
+// contrast against a dark surface.
 export const DISEASE_META = {
   heart: {
     label: "Heart Disease",
     tagline: "Cardiovascular risk from resting clinical measurements",
-    color: "#8B5A52",
+    color: "var(--disease-heart)",
   },
   diabetes: {
     label: "Diabetes",
     tagline: "Type 2 diabetes risk from metabolic panel values",
-    color: "#8C7A45",
+    color: "var(--disease-diabetes)",
   },
   breast_cancer: {
     label: "Breast Cancer",
     tagline: "Malignancy risk from cell nuclei measurements",
-    color: "#7A6A8C",
+    color: "var(--disease-breast_cancer)",
   },
   kidney: {
     label: "Kidney Disease",
     tagline: "Chronic kidney disease risk from blood & urine panel",
-    color: "#4F7A6E",
+    color: "var(--disease-kidney)",
   },
   liver: {
     label: "Liver Disease",
     tagline: "Liver disease risk from enzyme & bilirubin panel",
-    color: "#5C7A5C",
+    color: "var(--disease-liver)",
   },
 };
 

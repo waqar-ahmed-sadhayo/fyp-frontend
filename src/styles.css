@@ -62,6 +62,16 @@
   --risk-mid: #8f5518;
   --risk-mid-wash: #f7ecdc;
 
+  /* Per-disease identity colors (sidebar icons, service cards) — a second
+     color *dimension* for wayfinding across 5 services, not decoration.
+     Dark-mode gets its own lighter set below; these mid-tone muted colors
+     read fine on white but drop under 3:1 on a dark surface. */
+  --disease-heart: #8b5a52;
+  --disease-diabetes: #8c7a45;
+  --disease-breast_cancer: #7a6a8c;
+  --disease-kidney: #4f7a6e;
+  --disease-liver: #5c7a5c;
+
   --font-display: "Fraunces", Georgia, "Times New Roman", serif;
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
@@ -120,6 +130,12 @@
     --risk-mid: #d99a4a;
     --risk-mid-wash: #33260f;
 
+    --disease-heart: #c99089;
+    --disease-diabetes: #cbb584;
+    --disease-breast_cancer: #b6a3c7;
+    --disease-kidney: #8fbbac;
+    --disease-liver: #9bbb9b;
+
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.25);
     --shadow: 0 6px 16px -6px rgba(0, 0, 0, 0.45), 0 2px 6px -2px rgba(0, 0, 0, 0.3);
     --shadow-lg: 0 24px 48px -16px rgba(0, 0, 0, 0.55), 0 8px 20px -8px rgba(0, 0, 0, 0.35);
@@ -155,6 +171,12 @@
   --risk-mid: #d99a4a;
   --risk-mid-wash: #33260f;
 
+  --disease-heart: #c99089;
+  --disease-diabetes: #cbb584;
+  --disease-breast_cancer: #b6a3c7;
+  --disease-kidney: #8fbbac;
+  --disease-liver: #9bbb9b;
+
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.25);
   --shadow: 0 6px 16px -6px rgba(0, 0, 0, 0.45), 0 2px 6px -2px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 24px 48px -16px rgba(0, 0, 0, 0.55), 0 8px 20px -8px rgba(0, 0, 0, 0.35);
@@ -188,6 +210,12 @@
   --risk-low-wash: #e7f7ef;
   --risk-mid: #8f5518;
   --risk-mid-wash: #f7ecdc;
+
+  --disease-heart: #8b5a52;
+  --disease-diabetes: #8c7a45;
+  --disease-breast_cancer: #7a6a8c;
+  --disease-kidney: #4f7a6e;
+  --disease-liver: #5c7a5c;
 
   --shadow-sm: 0 1px 2px rgba(14, 41, 48, 0.05), 0 1px 3px rgba(14, 41, 48, 0.06);
   --shadow: 0 6px 16px -6px rgba(14, 41, 48, 0.14), 0 2px 6px -2px rgba(14, 41, 48, 0.08);

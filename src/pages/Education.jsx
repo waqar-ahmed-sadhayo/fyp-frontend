@@ -32,7 +32,7 @@ export default function Education() {
         return (
           <section className="card card-pad" style={{ marginBottom: 18 }} key={key}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-              <span className="icon-badge" style={{ background: `${meta.color}1a`, color: meta.color, marginBottom: 0 }}>
+              <span className="icon-badge" style={{ background: `color-mix(in srgb, ${meta.color} 12%, transparent)`, color: meta.color, marginBottom: 0 }}>
                 <DiseaseIcon disease={key} />
               </span>
               <h3 style={{ margin: 0 }}>{meta.label}</h3>

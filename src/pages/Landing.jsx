@@ -265,7 +265,7 @@ export default function Landing() {
               >
                 <span
                   className="c-icon"
-                  style={{ background: `${meta.color}1a`, color: meta.color }}
+                  style={{ background: `color-mix(in srgb, ${meta.color} 12%, transparent)`, color: meta.color }}
                 >
                   <DiseaseIcon disease={key} />
                 </span>
@@ -277,7 +277,7 @@ export default function Landing() {
                 className="c-icon"
                 style={{
                   background: "var(--brand-wash)",
-                  color: "var(--brand-dark)",
+                  color: "var(--brand)",
                 }}
               >
                 <ClipboardIcon />
@@ -317,7 +317,7 @@ export default function Landing() {
                 <Link key={key} to="/education" className="learn-card">
                   <span
                     className="icon-badge"
-                    style={{ background: `${meta.color}1a`, color: meta.color }}
+                    style={{ background: `color-mix(in srgb, ${meta.color} 12%, transparent)`, color: meta.color }}
                   >
                     <DiseaseIcon disease={key} />
                   </span>

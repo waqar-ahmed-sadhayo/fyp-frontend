@@ -16,7 +16,7 @@ export default function ScreeningCard({ diseaseKey, meta, metrics, to }) {
       {metrics?.chosen_model && (
         <span className="corner-badge">{MODEL_SHORT[metrics.chosen_model] || metrics.chosen_model}</span>
       )}
-      <span className="icon-badge" style={{ background: `${meta.color}1a`, color: meta.color }}>
+      <span className="icon-badge" style={{ background: `color-mix(in srgb, ${meta.color} 12%, transparent)`, color: meta.color }}>
         <DiseaseIcon disease={diseaseKey} />
       </span>
       <h3>{meta.label}</h3>

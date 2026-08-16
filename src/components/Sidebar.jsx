@@ -32,7 +32,7 @@ export default function Sidebar() {
               <NavLink key={key} to={`/predict/${key}`} className={linkClass}>
                 <span
                   className="sidebar-link-icon"
-                  style={{ background: `${meta.color}1a`, color: meta.color }}
+                  style={{ background: `color-mix(in srgb, ${meta.color} 12%, transparent)`, color: meta.color }}
                 >
                   <DiseaseIcon disease={key} />
                 </span>
