@@ -7,11 +7,32 @@ export default function Admin() {
   const { user } = useAuth();
   const [users, setUsers] = useState(null);
   const [error, setError] = useState("");
+  const [busyId, setBusyId] = useState(null);
+
+  const load = () => api.adminUsers().then(setUsers).catch((e) => setError(e.message));
 
   useEffect(() => {
     if (!user?.is_admin) return;
-    api.adminUsers().then(setUsers).catch((e) => setError(e.message));
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  const toggleAdmin = async (target) => {
+    const makingAdmin = !target.is_admin;
+    const verb = makingAdmin ? "Make" : "Remove";
+    if (!window.confirm(`${verb} ${target.full_name} (${target.email}) ${makingAdmin ? "an admin" : "as admin"}?`)) return;
+
+    setError("");
+    setBusyId(target.id);
+    try {
+      await api.setUserAdmin(target.id, makingAdmin);
+      await load();
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setBusyId(null);
+    }
+  };
 
   if (!user?.is_admin) {
     return (
@@ -82,6 +103,7 @@ export default function Admin() {
                 <th>Joined</th>
                 <th>Screenings</th>
                 <th>Role</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -103,6 +125,18 @@ export default function Admin() {
                         User
                       </span>
                     )}
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      className={u.is_admin ? "btn btn-danger-ghost" : "btn btn-ghost"}
+                      style={{ padding: "6px 14px", fontSize: 12.5 }}
+                      disabled={busyId === u.id || u.id === user.id}
+                      title={u.id === user.id ? "You can't change your own admin status here" : undefined}
+                      onClick={() => toggleAdmin(u)}
+                    >
+                      {busyId === u.id ? "…" : u.is_admin ? "Remove admin" : "Make admin"}
+                    </button>
                   </td>
                 </tr>
               ))}

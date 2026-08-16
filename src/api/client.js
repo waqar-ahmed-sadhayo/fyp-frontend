@@ -159,6 +159,8 @@ export const api = {
   submitFeedback: (payload) => request("/feedback", { method: "POST", body: payload }),
 
   adminUsers: () => request("/admin/users"),
+  setUserAdmin: (userId, isAdmin) =>
+    request(`/admin/users/${userId}/admin`, { method: "PATCH", body: { is_admin: isAdmin } }),
 };
 
 export { getToken, setTokens, clearTokens, setSessionExpiredHandler };
