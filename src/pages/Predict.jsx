@@ -242,11 +242,11 @@ export default function Predict() {
             {groupFields(disease, features).map((group) => (
               <div className="field-group" key={group.title}>
                 <p className="field-group-title">{group.title}</p>
-                <div className="form-grid">
+                <StaggerGroup as="div" className="form-grid" stagger={0.04}>
                   {group.fields.map((f) => {
                     const fm = getFieldMeta(f);
                     return (
-                      <div className="field" key={f}>
+                      <motion.div className="field" key={f} variants={fadeUp}>
                         <label>
                           {fm.label}
                           {fm.unit && <span className="hint">{fm.unit}</span>}
@@ -273,10 +273,10 @@ export default function Predict() {
                             onChange={(e) => update(f, e.target.value)}
                           />
                         )}
-                      </div>
+                      </motion.div>
                     );
                   })}
-                </div>
+                </StaggerGroup>
               </div>
             ))}
           </div>
