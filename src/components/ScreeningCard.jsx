@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
+import { motion } from "motion/react";
 import { ArrowRightIcon, DiseaseIcon } from "./Icons";
+import { fadeUp, hoverLift, tapScale } from "../lib/motion";
 
 // Keys match the snake_case chosen_model values the backend actually returns
 // (see backend/app/ml/train_models.py) — not the display names.
@@ -10,9 +12,17 @@ const MODEL_SHORT = {
   gradient_boosting: "GB",
 };
 
+const MotionLink = motion.create(Link);
+
 export default function ScreeningCard({ diseaseKey, meta, metrics, to }) {
   return (
-    <Link to={to} className="disease-card">
+    <MotionLink
+      to={to}
+      className="disease-card"
+      variants={fadeUp}
+      whileHover={hoverLift}
+      whileTap={tapScale}
+    >
       {metrics?.chosen_model && (
         <span className="corner-badge">{MODEL_SHORT[metrics.chosen_model] || metrics.chosen_model}</span>
       )}
@@ -25,6 +35,6 @@ export default function ScreeningCard({ diseaseKey, meta, metrics, to }) {
         <span className="stat-price">{metrics ? `${(metrics.accuracy * 100).toFixed(1)}% acc` : "Loading…"}</span>
         <span className="go-btn"><ArrowRightIcon /></span>
       </div>
-    </Link>
+    </MotionLink>
   );
 }

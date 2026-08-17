@@ -161,6 +161,18 @@ export const api = {
   adminUsers: () => request("/admin/users"),
   setUserAdmin: (userId, isAdmin) =>
     request(`/admin/users/${userId}/admin`, { method: "PATCH", body: { is_admin: isAdmin } }),
+
+  healthSuggestions: (resultId) =>
+    request("/health-suggestions", { method: "POST", body: { result_id: resultId } }),
+  assistantChat: (messages) =>
+    request("/assistant/chat", { method: "POST", body: { messages } }),
+
+  kidneyStoneInfo: () => request("/xray/kidney-stone/info", { auth: false }),
+  predictKidneyStone: (file) => {
+    const form = new FormData();
+    form.append("file", file);
+    return request("/xray/kidney-stone", { method: "POST", body: form, isForm: true });
+  },
 };
 
 export { getToken, setTokens, clearTokens, setSessionExpiredHandler };

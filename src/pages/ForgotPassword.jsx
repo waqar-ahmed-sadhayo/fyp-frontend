@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "motion/react";
 import { api } from "../api/client";
 import AuthLayout from "../components/AuthLayout";
+import { hoverLift, tapScale } from "../lib/motion";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -42,12 +44,14 @@ export default function ForgotPassword() {
               No email service is configured — here is your reset token instead of an emailed
               link (expires in 1 hour): <span className="mono" style={{ fontWeight: 600 }}>{devToken}</span>
             </div>
-            <button
+            <motion.button
               className="btn btn-primary btn-block"
               onClick={() => navigate("/reset-password", { state: { token: devToken } })}
+              whileHover={hoverLift}
+              whileTap={tapScale}
             >
               Continue to reset password
-            </button>
+            </motion.button>
           </div>
         ) : (
           <form onSubmit={submit}>
@@ -56,9 +60,14 @@ export default function ForgotPassword() {
               <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com" />
             </div>
-            <button className="btn btn-primary btn-block" disabled={busy}>
+            <motion.button
+              className="btn btn-primary btn-block"
+              disabled={busy}
+              whileHover={busy ? undefined : hoverLift}
+              whileTap={busy ? undefined : tapScale}
+            >
               {busy ? "Requesting…" : "Send reset token"}
-            </button>
+            </motion.button>
           </form>
         )}
 

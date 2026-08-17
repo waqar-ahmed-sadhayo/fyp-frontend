@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { DISEASE_META } from "../diseaseConfig";
 import { DiseaseIcon } from "../components/Icons";
 import { api } from "../api/client";
+import Reveal from "../components/Reveal";
 
 export default function Education() {
   const [info, setInfo] = useState(null);
@@ -30,7 +31,7 @@ export default function Education() {
       {Object.entries(DISEASE_META).map(([key, meta]) => {
         const d = info?.[key];
         return (
-          <section className="card card-pad" style={{ marginBottom: 18 }} key={key}>
+          <Reveal as="section" className="card card-pad" style={{ marginBottom: 18 }} key={key}>
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
               <span className="icon-badge" style={{ background: `color-mix(in srgb, ${meta.color} 12%, transparent)`, color: meta.color, marginBottom: 0 }}>
                 <DiseaseIcon disease={key} />
@@ -65,7 +66,7 @@ export default function Education() {
                 </div>
               </>
             )}
-          </section>
+          </Reveal>
         );
       })}
     </div>

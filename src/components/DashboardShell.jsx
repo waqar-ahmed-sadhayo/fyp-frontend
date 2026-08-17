@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import ChatbotWidget from "./ChatbotWidget";
 
 export default function DashboardShell() {
   return (
@@ -8,6 +9,7 @@ export default function DashboardShell() {
       <div className="dashboard-content">
         <Outlet />
       </div>
+      <ChatbotWidget />
     </div>
   );
 }

@@ -1,11 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import {
   CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
+import { motion, AnimatePresence } from "motion/react";
 import { api } from "../api/client";
 import { DISEASE_META } from "../diseaseConfig";
+import Reveal, { StaggerGroup } from "../components/Reveal";
+import AISuggestionCard from "../components/AISuggestionCard";
+import { fadeUp, hoverLift, tapScale } from "../lib/motion";
 import {
-  AlertTriangleIcon, CheckCircleIcon, DownloadIcon, HelpCircleIcon, TrendingUpIcon,
+  AlertTriangleIcon, CheckCircleIcon, DownloadIcon, HelpCircleIcon, SparkleIcon, TrendingUpIcon,
 } from "../components/Icons";
 
 function TrendTooltip({ active, payload, label }) {
@@ -22,6 +26,7 @@ export default function History() {
   const [items, setItems] = useState(null);
   const [error, setError] = useState("");
   const [exportingId, setExportingId] = useState(null);
+  const [aiOpenId, setAiOpenId] = useState(null);
 
   const load = () => {
     api.history().then(setItems).catch((e) => setError(e.message));
@@ -79,15 +84,15 @@ export default function History() {
 
       {trends.length > 0 && (
         <section className="landing-section" style={{ marginTop: 24 }}>
-          <div className="section-head">
+          <Reveal as="div" className="section-head">
             <div>
               <p className="eyebrow"><TrendingUpIcon width={13} height={13} style={{ verticalAlign: -2 }} /> Trends</p>
               <h2 style={{ fontSize: 18 }}>Confidence over time</h2>
             </div>
-          </div>
-          <div className="trend-grid">
+          </Reveal>
+          <StaggerGroup as="div" className="trend-grid">
             {trends.map(({ disease, meta, data }) => (
-              <div className="card card-pad trend-card" key={disease}>
+              <motion.div className="card card-pad trend-card" key={disease} variants={fadeUp}>
                 <p className="trend-card-title">{meta?.label || disease}</p>
                 <ResponsiveContainer width="100%" height={140}>
                   <LineChart data={data} margin={{ top: 6, right: 10, left: -20, bottom: 0 }}>
@@ -112,19 +117,19 @@ export default function History() {
                     />
                   </LineChart>
                 </ResponsiveContainer>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </StaggerGroup>
         </section>
       )}
 
       {items === null ? null : items.length === 0 ? (
-        <div className="empty-state card" style={{ marginTop: 20 }}>
+        <Reveal as="div" className="empty-state card" style={{ marginTop: 20 }}>
           <h3>No screenings yet</h3>
           <p>Run a screening from the dashboard and it will show up here.</p>
-        </div>
+        </Reveal>
       ) : (
-        <div className="card" style={{ marginTop: 20, overflowX: "auto" }}>
+        <Reveal as="div" className="card" style={{ marginTop: 20, overflowX: "auto" }}>
           <table className="history-table">
             <thead>
               <tr>
@@ -139,16 +144,17 @@ export default function History() {
             <tbody>
               {items.map((r) => {
                 const isBorderline = r.prediction === "borderline";
-                const isRisk = !isBorderline && !["benign", "negative"].includes(r.prediction);
+                const isRisk = !isBorderline && !["benign", "negative", "no_stone"].includes(r.prediction);
                 const pillColor = isBorderline ? "var(--risk-mid)" : isRisk ? "var(--risk-high)" : "var(--risk-low)";
                 const pillWash = isBorderline ? "var(--risk-mid-wash)" : isRisk ? "var(--risk-high-wash)" : "var(--risk-low-wash)";
                 const PillIcon = isBorderline ? HelpCircleIcon : isRisk ? AlertTriangleIcon : CheckCircleIcon;
                 return (
-                  <tr key={r.id}>
+                  <Fragment key={r.id}>
+                  <tr>
                     <td className="mono" style={{ color: "var(--muted)" }}>
                       {new Date(r.created_at).toLocaleString()}
                     </td>
-                    <td>{DISEASE_META[r.disease]?.label || r.disease}</td>
+                    <td>{DISEASE_META[r.disease]?.label || (r.disease === "kidney_stone" ? "Kidney Stone (CT Scan)" : r.disease)}</td>
                     <td>
                       <span className="pill" style={{ background: pillWash, color: pillColor }}>
                         <PillIcon /> {r.prediction}
@@ -157,24 +163,60 @@ export default function History() {
                     <td className="mono">{(r.probability * 100).toFixed(1)}%</td>
                     <td className="mono" style={{ color: "var(--muted)" }}>{r.model_used}</td>
                     <td style={{ display: "flex", gap: 8 }}>
-                      <button
+                      <motion.button
+                        className={`btn ${aiOpenId === r.id ? "btn-primary" : "btn-ghost"}`}
+                        onClick={() => setAiOpenId((id) => (id === r.id ? null : r.id))}
+                        title="AI Suggestions Lein"
+                        whileHover={hoverLift}
+                        whileTap={tapScale}
+                      >
+                        <SparkleIcon width={14} height={14} />
+                      </motion.button>
+                      <motion.button
                         className="btn btn-ghost"
                         onClick={() => exportPdf(r)}
                         disabled={exportingId === r.id}
                         title="Export as PDF"
+                        whileHover={exportingId === r.id ? undefined : hoverLift}
+                        whileTap={exportingId === r.id ? undefined : tapScale}
                       >
                         <DownloadIcon width={14} height={14} />
-                      </button>
-                      <button className="btn btn-danger-ghost" onClick={() => remove(r.id)}>
+                      </motion.button>
+                      <motion.button
+                        className="btn btn-danger-ghost"
+                        onClick={() => remove(r.id)}
+                        whileHover={hoverLift}
+                        whileTap={tapScale}
+                      >
                         Delete
-                      </button>
+                      </motion.button>
                     </td>
                   </tr>
+                  <AnimatePresence>
+                    {aiOpenId === r.id && (
+                      <tr>
+                        <td colSpan={6} style={{ padding: 0, border: "none" }}>
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                            style={{ overflow: "hidden" }}
+                          >
+                            <div style={{ padding: "4px 4px 16px" }}>
+                              <AISuggestionCard resultId={r.id} />
+                            </div>
+                          </motion.div>
+                        </td>
+                      </tr>
+                    )}
+                  </AnimatePresence>
+                  </Fragment>
                 );
               })}
             </tbody>
           </table>
-        </div>
+        </Reveal>
       )}
     </div>
   );

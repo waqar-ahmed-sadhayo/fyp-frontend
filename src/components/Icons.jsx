@@ -269,6 +269,25 @@ export function BadgeCheckIcon(props) {
   );
 }
 
+// Original line-art robot mascot for the chat assistant widget — rounded
+// head with ear-like side bumps, a friendly face, and an antenna with a
+// signal ping, echoing a "medical bot" without reproducing any specific
+// stock illustration.
+export function RobotIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 3v2.2" />
+      <circle cx="12" cy="2.2" r="0.9" fill="currentColor" stroke="none" />
+      <rect x="5" y="7" width="14" height="11" rx="5" />
+      <path d="M3.5 11a2 2 0 0 1 0 4M20.5 11a2 2 0 0 1 0 4" />
+      <circle cx="9" cy="12.2" r="1" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="12.2" r="1" fill="currentColor" stroke="none" />
+      <path d="M9 15.3c.9.7 2.1.7 3 0" />
+      <path d="M12 18v2.3M9.3 20.3h5.4" />
+    </svg>
+  );
+}
+
 const DISEASE_ICONS = {
   heart: HeartIcon,
   diabetes: DropletIcon,

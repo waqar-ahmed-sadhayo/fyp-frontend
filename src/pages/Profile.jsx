@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { motion } from "motion/react";
 import { api } from "../api/client";
 import { useAuth } from "../context/AuthContext";
+import Reveal from "../components/Reveal";
+import { hoverLift, tapScale } from "../lib/motion";
 
 export default function Profile() {
   const { user, setUser } = useAuth();
@@ -71,7 +74,7 @@ export default function Profile() {
 
       {error && <div className="error-banner">{error}</div>}
 
-      <div className="card card-pad" style={{ marginBottom: 20 }}>
+      <Reveal as="div" className="card card-pad" style={{ marginBottom: 20 }}>
         <p className="eyebrow" style={{ marginBottom: 14 }}>Details</p>
         <form onSubmit={saveProfile}>
           <div className="form-grid">
@@ -98,13 +101,19 @@ export default function Profile() {
             </div>
           </div>
           {saveMsg && <p style={{ color: "var(--risk-low)", fontSize: 13, marginTop: 4 }}>{saveMsg}</p>}
-          <button className="btn btn-primary" disabled={busy} style={{ marginTop: 12 }}>
+          <motion.button
+            className="btn btn-primary"
+            disabled={busy}
+            style={{ marginTop: 12 }}
+            whileHover={busy ? undefined : hoverLift}
+            whileTap={busy ? undefined : tapScale}
+          >
             {busy ? "Saving…" : "Save changes"}
-          </button>
+          </motion.button>
         </form>
-      </div>
+      </Reveal>
 
-      <div className="card card-pad">
+      <Reveal as="div" className="card card-pad">
         <p className="eyebrow" style={{ marginBottom: 14 }}>Email verification</p>
         {user.email_verified ? (
           <p style={{ fontSize: 13.5, color: "var(--risk-low)", fontWeight: 600 }}>Your email is verified.</p>
@@ -123,12 +132,17 @@ export default function Profile() {
                 {verifyMsg}
               </p>
             )}
-            <button className="btn btn-ghost" disabled={verifyBusy}>
+            <motion.button
+              className="btn btn-ghost"
+              disabled={verifyBusy}
+              whileHover={verifyBusy ? undefined : hoverLift}
+              whileTap={verifyBusy ? undefined : tapScale}
+            >
               {verifyBusy ? "Verifying…" : "Verify email"}
-            </button>
+            </motion.button>
           </form>
         )}
-      </div>
+      </Reveal>
     </div>
   );
 }

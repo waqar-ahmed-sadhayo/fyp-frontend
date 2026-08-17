@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { motion } from "motion/react";
 import { api } from "../api/client";
 import AuthLayout from "../components/AuthLayout";
+import { hoverLift, tapScale } from "../lib/motion";
 
 export default function ResetPassword() {
   const location = useLocation();
@@ -42,9 +44,14 @@ export default function ResetPassword() {
             <input type="password" required minLength={8} value={password}
               onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
           </div>
-          <button className="btn btn-primary btn-block" disabled={busy}>
+          <motion.button
+            className="btn btn-primary btn-block"
+            disabled={busy}
+            whileHover={busy ? undefined : hoverLift}
+            whileTap={busy ? undefined : tapScale}
+          >
             {busy ? "Resetting…" : "Reset password"}
-          </button>
+          </motion.button>
         </form>
         <p className="auth-foot">
           <Link to="/login">Back to sign in</Link>

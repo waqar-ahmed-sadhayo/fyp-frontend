@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "motion/react";
 import { useAuth } from "../context/AuthContext";
 import { api } from "../api/client";
 import { DISEASE_META } from "../diseaseConfig";
 import ScreeningCard from "../components/ScreeningCard";
 import DashboardPreview from "../components/DashboardPreview";
+import Reveal, { StaggerGroup } from "../components/Reveal";
+import { fadeUp, scaleIn, hoverLift, tapScale } from "../lib/motion";
 import {
   ArrowRightIcon,
   BadgeCheckIcon,
@@ -20,6 +23,8 @@ import {
   UploadIcon,
   UserIcon,
 } from "../components/Icons";
+
+const MotionLink = motion.create(Link);
 
 const HERO_FEATURES = [
   { icon: SparkleIcon, title: "AI-powered", sub: "Trained on real datasets" },
@@ -118,35 +123,42 @@ export default function Landing() {
       <div className="hero-banner">
         <div className="hero-banner-inner">
           <section className="hero">
-            <div className="hero-content">
-              <span className="hero-badge">
+            <StaggerGroup as="div" className="hero-content" stagger={0.09}>
+              <motion.span className="hero-badge" variants={fadeUp}>
                 <SparkleIcon /> AI-powered screening
-              </span>
-              <h1>
+              </motion.span>
+              <motion.h1 variants={fadeUp}>
                 Smart Detection,
                 <br />
-                <span style={{ color: "var(--cta-dark)" }}>Better Awareness.</span>
-              </h1>
-              <p className="lede">
+                <span style={{ color: "var(--brand-dark)" }}>Better Awareness.</span>
+              </motion.h1>
+              <motion.p className="lede" variants={fadeUp}>
                 Multi-Disease Detection System uses trained AI models to screen
                 your lab panel and support early awareness — for heart disease,
                 diabetes, breast cancer, kidney disease and liver disease.
-              </p>
+              </motion.p>
 
-              <div className="hero-actions">
-                <Link
+              <motion.div className="hero-actions" variants={fadeUp}>
+                <MotionLink
                   to={user ? "/dashboard" : "/register"}
                   className="btn btn-primary"
+                  whileHover={hoverLift}
+                  whileTap={tapScale}
                 >
                   <UploadIcon width={16} height={16} />{" "}
                   {user ? "Upload a report" : "Create an account"}
-                </Link>
-                <a href="#how-it-works" className="btn btn-ghost">
+                </MotionLink>
+                <motion.a
+                  href="#how-it-works"
+                  className="btn btn-ghost"
+                  whileHover={hoverLift}
+                  whileTap={tapScale}
+                >
                   See how it works
-                </a>
-              </div>
+                </motion.a>
+              </motion.div>
 
-              <div className="trust-row">
+              <motion.div className="trust-row" variants={fadeUp}>
                 <span className="trust-row-item">
                   <ShieldIcon /> Private &amp; encrypted data
                 </span>
@@ -156,9 +168,9 @@ export default function Landing() {
                 <span className="trust-row-item">
                   <LayersIcon /> 5 conditions, one account
                 </span>
-              </div>
+              </motion.div>
 
-              <div className="hero-feature-row">
+              <motion.div className="hero-feature-row" variants={fadeUp}>
                 {HERO_FEATURES.map((f) => (
                   <div className="hf-item" key={f.title}>
                     <span className="hf-icon">
@@ -170,15 +182,15 @@ export default function Landing() {
                     </div>
                   </div>
                 ))}
-              </div>
-            </div>
+              </motion.div>
+            </StaggerGroup>
 
-            <div className="hero-visual">
+            <Reveal as="div" className="hero-visual" variants={scaleIn}>
               <DashboardPreview />
-            </div>
+            </Reveal>
           </section>
 
-          <div className="quick-start">
+          <Reveal as="div" className="quick-start">
             <div className="field">
               <label>Screening</label>
               <select value={pick} onChange={(e) => setPick(e.target.value)}>
@@ -189,22 +201,27 @@ export default function Landing() {
                 ))}
               </select>
             </div>
-            <button className="btn btn-primary" onClick={startScreening}>
+            <motion.button
+              className="btn btn-primary"
+              onClick={startScreening}
+              whileHover={hoverLift}
+              whileTap={tapScale}
+            >
               {user ? "Start screening" : "Create an account"}
-            </button>
-          </div>
+            </motion.button>
+          </Reveal>
         </div>
       </div>
 
       <div className="shell-inner">
-        <div className="disclaimer" style={{ marginTop: 76 }}>
+        <Reveal as="div" className="disclaimer" style={{ marginTop: 76 }}>
           Educational preliminary-screening tool only — not a certified
           diagnostic device. Results should be discussed with a qualified
           healthcare professional.
-        </div>
+        </Reveal>
 
-        <div className="trust-bar">
-          <div className="t-item">
+        <StaggerGroup as="div" className="trust-bar">
+          <motion.div className="t-item" variants={fadeUp}>
             <span className="t-icon">
               <PulseIcon />
             </span>
@@ -212,8 +229,8 @@ export default function Landing() {
               <h5>Instant results</h5>
               <p>No waiting room</p>
             </div>
-          </div>
-          <div className="t-item">
+          </motion.div>
+          <motion.div className="t-item" variants={fadeUp}>
             <span className="t-icon">
               <ShieldIcon />
             </span>
@@ -221,8 +238,8 @@ export default function Landing() {
               <h5>Private data</h5>
               <p>Yours alone</p>
             </div>
-          </div>
-          <div className="t-item">
+          </motion.div>
+          <motion.div className="t-item" variants={fadeUp}>
             <span className="t-icon">
               <LayersIcon />
             </span>
@@ -230,8 +247,8 @@ export default function Landing() {
               <h5>5 conditions</h5>
               <p>One account</p>
             </div>
-          </div>
-          <div className="t-item">
+          </motion.div>
+          <motion.div className="t-item" variants={fadeUp}>
             <span className="t-icon">
               <BadgeCheckIcon />
             </span>
@@ -239,12 +256,12 @@ export default function Landing() {
               <h5>Free to use</h5>
               <p>Always</p>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </StaggerGroup>
 
         {/* ---- screen for a condition (category grid) ---- */}
         <section className="landing-section">
-          <div className="section-head">
+          <Reveal as="div" className="section-head">
             <div>
               <p className="eyebrow">Get started</p>
               <h2>Screen for a condition</h2>
@@ -255,13 +272,16 @@ export default function Landing() {
             >
               View all →
             </Link>
-          </div>
-          <div className="category-grid">
+          </Reveal>
+          <StaggerGroup as="div" className="category-grid">
             {Object.entries(DISEASE_META).map(([key, meta]) => (
-              <Link
+              <MotionLink
                 key={key}
                 to={user ? `/predict/${key}` : "/register"}
                 className="category-tile"
+                variants={fadeUp}
+                whileHover={hoverLift}
+                whileTap={tapScale}
               >
                 <span
                   className="c-icon"
@@ -270,9 +290,15 @@ export default function Landing() {
                   <DiseaseIcon disease={key} />
                 </span>
                 <span className="label">{meta.label}</span>
-              </Link>
+              </MotionLink>
             ))}
-            <Link to={user ? "/history" : "/login"} className="category-tile">
+            <MotionLink
+              to={user ? "/history" : "/login"}
+              className="category-tile"
+              variants={fadeUp}
+              whileHover={hoverLift}
+              whileTap={tapScale}
+            >
               <span
                 className="c-icon"
                 style={{
@@ -283,25 +309,31 @@ export default function Landing() {
                 <ClipboardIcon />
               </span>
               <span className="label">History</span>
-            </Link>
-            <Link to="/education" className="category-tile">
+            </MotionLink>
+            <MotionLink
+              to="/education"
+              className="category-tile"
+              variants={fadeUp}
+              whileHover={hoverLift}
+              whileTap={tapScale}
+            >
               <span
                 className="c-icon"
                 style={{
-                  background: "var(--accent-wash)",
-                  color: "var(--accent)",
+                  background: "var(--brand-wash)",
+                  color: "var(--brand)",
                 }}
               >
                 <BookOpenIcon />
               </span>
               <span className="label">Learn</span>
-            </Link>
-          </div>
+            </MotionLink>
+          </StaggerGroup>
         </section>
 
         {/* ---- learn (education preview, one row) ---- */}
         <section className="landing-section">
-          <div className="section-head">
+          <Reveal as="div" className="section-head">
             <div>
               <p className="eyebrow">Education</p>
               <h2>Learn about each condition</h2>
@@ -309,12 +341,19 @@ export default function Landing() {
             <Link to="/education" style={{ fontSize: 13, fontWeight: 600 }}>
               View all →
             </Link>
-          </div>
-          <div className="learn-row">
+          </Reveal>
+          <StaggerGroup as="div" className="learn-row">
             {Object.entries(DISEASE_META).map(([key, meta]) => {
               const info = diseaseInfo?.[key];
               return (
-                <Link key={key} to="/education" className="learn-card">
+                <MotionLink
+                  key={key}
+                  to="/education"
+                  className="learn-card"
+                  variants={fadeUp}
+                  whileHover={hoverLift}
+                  whileTap={tapScale}
+                >
                   <span
                     className="icon-badge"
                     style={{ background: `color-mix(in srgb, ${meta.color} 12%, transparent)`, color: meta.color }}
@@ -326,22 +365,22 @@ export default function Landing() {
                   <span className="learn-more">
                     Read more <ArrowRightIcon />
                   </span>
-                </Link>
+                </MotionLink>
               );
             })}
-          </div>
+          </StaggerGroup>
         </section>
 
         {/* ---- disease showcase (product-card style) ---- */}
         <section className="landing-section">
-          <div className="section-head">
+          <Reveal as="div" className="section-head">
             <div>
               <p className="eyebrow">Coverage</p>
               <h2>Five screenings, one account</h2>
             </div>
             <p>Metrics measured on a held-out test split, per model.</p>
-          </div>
-          <div className="disease-grid">
+          </Reveal>
+          <StaggerGroup as="div" className="disease-grid">
             {Object.entries(DISEASE_META).map(([key, meta]) => (
               <ScreeningCard
                 key={key}
@@ -351,11 +390,11 @@ export default function Landing() {
                 to={user ? `/predict/${key}` : "/register"}
               />
             ))}
-          </div>
+          </StaggerGroup>
         </section>
 
         {/* ---- promo banner ---- */}
-        <div className="promo-banner">
+        <Reveal as="div" className="promo-banner">
           <div>
             <span className="p-icon">
               <UploadIcon />
@@ -365,12 +404,14 @@ export default function Landing() {
               Upload a CSV export and we'll auto-fill the panel and run the
               screening for you.
             </p>
-            <Link
+            <MotionLink
               to={user ? "/dashboard" : "/register"}
               className="btn btn-primary"
+              whileHover={hoverLift}
+              whileTap={tapScale}
             >
               {user ? "Upload a report" : "Create an account"}
-            </Link>
+            </MotionLink>
           </div>
           <div className="promo-visual">
             <div className="promo-doc">
@@ -387,10 +428,10 @@ export default function Landing() {
               <BadgeCheckIcon /> Auto-filled
             </span>
           </div>
-        </div>
+        </Reveal>
 
-        <div className="trust-bar" style={{ marginTop: 20 }}>
-          <div className="t-item">
+        <StaggerGroup as="div" className="trust-bar" style={{ marginTop: 20 }}>
+          <motion.div className="t-item" variants={fadeUp}>
             <span className="t-icon">
               <BadgeCheckIcon />
             </span>
@@ -398,8 +439,8 @@ export default function Landing() {
               <h5>Educational use</h5>
               <p>Not a diagnosis</p>
             </div>
-          </div>
-          <div className="t-item">
+          </motion.div>
+          <motion.div className="t-item" variants={fadeUp}>
             <span className="t-icon">
               <DatabaseIcon />
             </span>
@@ -407,8 +448,8 @@ export default function Landing() {
               <h5>Public datasets</h5>
               <p>UCI &amp; Kaggle</p>
             </div>
-          </div>
-          <div className="t-item">
+          </motion.div>
+          <motion.div className="t-item" variants={fadeUp}>
             <span className="t-icon">
               <ShieldIcon />
             </span>
@@ -416,8 +457,8 @@ export default function Landing() {
               <h5>No data resale</h5>
               <p>Ever</p>
             </div>
-          </div>
-          <div className="t-item">
+          </motion.div>
+          <motion.div className="t-item" variants={fadeUp}>
             <span className="t-icon">
               <PulseIcon />
             </span>
@@ -425,40 +466,45 @@ export default function Landing() {
               <h5>Open source spirit</h5>
               <p>Built as a student FYP</p>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </StaggerGroup>
 
         {/* ---- how it works ---- */}
         <section className="landing-section" id="how-it-works">
-          <div className="section-head">
+          <Reveal as="div" className="section-head">
             <div>
               <p className="eyebrow">Process</p>
               <h2>How a screening works</h2>
             </div>
-          </div>
-          <div className="steps-grid">
+          </Reveal>
+          <StaggerGroup as="div" className="steps-grid">
             {STEPS.map((s, i) => (
-              <div className="card card-pad step-card" key={s.title}>
+              <motion.div
+                className="card card-pad step-card"
+                key={s.title}
+                variants={fadeUp}
+                whileHover={hoverLift}
+              >
                 <span className="step-icon">
                   <s.icon />
                 </span>
                 <span className="step-num">{i + 1}</span>
                 <h4>{s.title}</h4>
                 <p>{s.body}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </StaggerGroup>
         </section>
 
         {/* ---- model performance transparency table ---- */}
         <section className="landing-section">
-          <div className="section-head">
+          <Reveal as="div" className="section-head">
             <div>
               <p className="eyebrow">Transparency</p>
               <h2>Model performance, in full</h2>
             </div>
-          </div>
-          <div className="card" style={{ overflowX: "auto" }}>
+          </Reveal>
+          <Reveal as="div" className="card" style={{ overflowX: "auto" }}>
             <table className="history-table perf-table">
               <thead>
                 <tr>
@@ -499,7 +545,7 @@ export default function Landing() {
                 })}
               </tbody>
             </table>
-          </div>
+          </Reveal>
           {/* <p className="perf-note">
           Shown as measured, not curated — heart, diabetes and liver currently sit below the 85%
           accuracy target and are still being tuned. Kidney and breast cancer are trained on small,
@@ -509,8 +555,14 @@ export default function Landing() {
         </section>
 
         {/* ---- bottom action cards ---- */}
-        <div className="bottom-cards">
-          <Link to="/education" className="bottom-card light">
+        <StaggerGroup as="div" className="bottom-cards">
+          <MotionLink
+            to="/education"
+            className="bottom-card light"
+            variants={fadeUp}
+            whileHover={hoverLift}
+            whileTap={tapScale}
+          >
             <span className="bc-icon">
               <BookOpenIcon />
             </span>
@@ -521,8 +573,14 @@ export default function Landing() {
             <span className="bc-cta">
               Visit the Learn page <ArrowRightIcon />
             </span>
-          </Link>
-          <Link to={user ? "/history" : "/login"} className="bottom-card light">
+          </MotionLink>
+          <MotionLink
+            to={user ? "/history" : "/login"}
+            className="bottom-card light"
+            variants={fadeUp}
+            whileHover={hoverLift}
+            whileTap={tapScale}
+          >
             <span className="bc-icon">
               <ClipboardIcon />
             </span>
@@ -531,10 +589,13 @@ export default function Landing() {
             <span className="bc-cta">
               View history <ArrowRightIcon />
             </span>
-          </Link>
-          <Link
+          </MotionLink>
+          <MotionLink
             to={user ? "/feedback" : "/register"}
             className="bottom-card dark"
+            variants={fadeUp}
+            whileHover={hoverLift}
+            whileTap={tapScale}
           >
             <span className="bc-icon">
               <SendIcon />
@@ -547,26 +608,26 @@ export default function Landing() {
             <span className="bc-cta">
               Send feedback <ArrowRightIcon />
             </span>
-          </Link>
-        </div>
+          </MotionLink>
+        </StaggerGroup>
 
         {/* ---- real-facts stat strip ---- */}
-        <div className="stats-strip">
-          <div className="s-item">
+        <StaggerGroup as="div" className="stats-strip">
+          <motion.div className="s-item" variants={fadeUp}>
             <span className="s-icon">
               <LayersIcon />
             </span>
             <div className="s-num">5</div>
             <div className="s-label">Diseases screened</div>
-          </div>
-          <div className="s-item">
+          </motion.div>
+          <motion.div className="s-item" variants={fadeUp}>
             <span className="s-icon">
               <DatabaseIcon />
             </span>
             <div className="s-num">300–770</div>
             <div className="s-label">Rows per training dataset</div>
-          </div>
-          <div className="s-item">
+          </motion.div>
+          <motion.div className="s-item" variants={fadeUp}>
             <span className="s-icon">
               <BadgeCheckIcon />
             </span>
@@ -574,57 +635,62 @@ export default function Landing() {
               {bestAccuracy ? `${(bestAccuracy * 100).toFixed(1)}%` : "—"}
             </div>
             <div className="s-label">Best model accuracy</div>
-          </div>
-          <div className="s-item">
+          </motion.div>
+          <motion.div className="s-item" variants={fadeUp}>
             <span className="s-icon">
               <ShieldIcon />
             </span>
             <div className="s-num">100%</div>
             <div className="s-label">Free &amp; educational</div>
-          </div>
-        </div>
+          </motion.div>
+        </StaggerGroup>
 
         {/* ---- team ---- */}
         <section className="landing-section">
-          <div className="section-head">
+          <Reveal as="div" className="section-head">
             <div>
               <p className="eyebrow">Team</p>
               <h2>Built by</h2>
             </div>
-          </div>
-          <div className="team-grid">
+          </Reveal>
+          <StaggerGroup as="div" className="team-grid">
             {TEAM.map((m) => (
-              <div className="team-card" key={m.rollNo}>
+              <motion.div
+                className="team-card"
+                key={m.rollNo}
+                variants={fadeUp}
+                whileHover={hoverLift}
+              >
                 <span className="team-avatar">{initials(m.name)}</span>
                 <div>
                   <div className="team-name">{m.name}</div>
                   <div className="team-roll">{m.rollNo}</div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </StaggerGroup>
         </section>
 
         {/* ---- faq ---- */}
         <section className="landing-section">
-          <div className="section-head">
+          <Reveal as="div" className="section-head">
             <div>
               <p className="eyebrow">Questions</p>
               <h2>Frequently asked</h2>
             </div>
-          </div>
-          <div className="faq-list">
+          </Reveal>
+          <StaggerGroup as="div" className="faq-list" stagger={0.05}>
             {FAQS.map((f) => (
-              <details className="faq-item" key={f.q}>
+              <motion.details className="faq-item" key={f.q} variants={fadeUp}>
                 <summary>{f.q}</summary>
                 <p>{f.a}</p>
-              </details>
+              </motion.details>
             ))}
-          </div>
+          </StaggerGroup>
         </section>
 
         {/* ---- closing cta ---- */}
-        <div className="cta-band">
+        <Reveal as="div" className="cta-band">
           <h2>
             {user
               ? "Ready for your next screening?"
@@ -632,19 +698,26 @@ export default function Landing() {
           </h2>
           <p>Free, educational, and takes under a minute to get a result.</p>
           <div className="hero-actions on-dark" style={{ justifyContent: "center" }}>
-            <Link
+            <MotionLink
               to={user ? "/dashboard" : "/register"}
               className="btn btn-primary"
+              whileHover={hoverLift}
+              whileTap={tapScale}
             >
               {user ? "Go to screening" : "Get started"}
-            </Link>
+            </MotionLink>
             {!user && (
-              <Link to="/login" className="btn btn-ghost">
+              <MotionLink
+                to="/login"
+                className="btn btn-ghost"
+                whileHover={hoverLift}
+                whileTap={tapScale}
+              >
                 Sign in
-              </Link>
+              </MotionLink>
             )}
           </div>
-        </div>
+        </Reveal>
       </div>
     </>
   );

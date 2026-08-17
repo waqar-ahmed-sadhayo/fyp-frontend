@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Topbar from "./components/Topbar";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -17,9 +18,11 @@ import Profile from "./pages/Profile";
 import Education from "./pages/Education";
 import Feedback from "./pages/Feedback";
 import Admin from "./pages/Admin";
+import KidneyStoneScan from "./pages/KidneyStoneScan";
 
 function AppShell() {
   const location = useLocation();
+  const reduceMotion = useReducedMotion();
   const AUTH_PATHS = [
     "/login",
     "/register",
@@ -28,33 +31,52 @@ function AppShell() {
   ];
   const hideFooter = AUTH_PATHS.includes(location.pathname);
 
+  const routes = (
+    <Routes location={location}>
+      <Route path="/" element={<Landing />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/education" element={<Education />} />
+
+      <Route
+        element={
+          <ProtectedRoute>
+            <DashboardShell />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/predict/:disease" element={<Predict />} />
+        <Route path="/screening/kidney-stone" element={<KidneyStoneScan />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/feedback" element={<Feedback />} />
+        <Route path="/admin" element={<Admin />} />
+      </Route>
+    </Routes>
+  );
+
   return (
     <div className="app-shell">
       <Topbar />
       <main className="main-area">
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/education" element={<Education />} />
-
-          <Route
-            element={
-              <ProtectedRoute>
-                <DashboardShell />
-              </ProtectedRoute>
-            }
-          >
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/predict/:disease" element={<Predict />} />
-            <Route path="/history" element={<History />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/feedback" element={<Feedback />} />
-            <Route path="/admin" element={<Admin />} />
-          </Route>
-        </Routes>
+        {reduceMotion ? (
+          routes
+        ) : (
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {routes}
+            </motion.div>
+          </AnimatePresence>
+        )}
       </main>
       {!hideFooter && <Footer />}
     </div>

@@ -1,13 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "motion/react";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { api } from "../api/client";
 import { DISEASE_META } from "../diseaseConfig";
+import { tapScale } from "../lib/motion";
 import {
   ClipboardIcon, LogOutIcon, MoonIcon, SearchIcon, SunIcon, UserIcon,
 } from "./Icons";
 import logo from "../assets/logo.png";
+
+const MotionLink = motion.create(Link);
 
 function initials(name = "") {
   const parts = name.trim().split(/\s+/);
@@ -58,21 +62,29 @@ function HeaderSearch({ user, navigate }) {
         onFocus={() => setOpen(true)}
         onKeyDown={(e) => { if (e.key === "Enter" && matches[0]) select(matches[0]); if (e.key === "Escape") setOpen(false); }}
       />
-      {open && matches.length > 0 && (
-        <div className="header-search-results">
-          {matches.map((r) => (
-            <button
-              type="button"
-              key={`${r.type}-${r.key || r.path}`}
-              onMouseDown={(e) => e.preventDefault()}
-              onClick={() => select(r)}
-            >
-              <span className="r-label">{r.label}</span>
-              <span className="r-sub">{r.sub}</span>
-            </button>
-          ))}
-        </div>
-      )}
+      <AnimatePresence>
+        {open && matches.length > 0 && (
+          <motion.div
+            className="header-search-results"
+            initial={{ opacity: 0, y: -6, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.98 }}
+            transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {matches.map((r) => (
+              <button
+                type="button"
+                key={`${r.type}-${r.key || r.path}`}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => select(r)}
+              >
+                <span className="r-label">{r.label}</span>
+                <span className="r-sub">{r.sub}</span>
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -107,24 +119,25 @@ export default function Topbar() {
       <HeaderSearch user={user} navigate={navigate} />
 
       <div className="topbar-actions">
-        <button
+        <motion.button
           type="button"
           className="icon-action"
           title={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
           onClick={toggleTheme}
+          whileTap={tapScale}
         >
           {theme === "dark" ? <SunIcon /> : <MoonIcon />}
-        </button>
+        </motion.button>
         {user ? (
           <>
-            <Link to="/history" className="icon-action" title="Screening history">
+            <MotionLink to="/history" className="icon-action" title="Screening history" whileTap={tapScale}>
               <ClipboardIcon />
               {historyCount > 0 && <span className="badge-count">{historyCount}</span>}
-            </Link>
-            <Link to="/profile" className="icon-action" title="Your profile">
+            </MotionLink>
+            <MotionLink to="/profile" className="icon-action" title="Your profile" whileTap={tapScale}>
               <span className="avatar">{initials(user.full_name) || "?"}</span>
-            </Link>
-            <button
+            </MotionLink>
+            <motion.button
               type="button"
               className="icon-action"
               title="Sign out"
@@ -132,18 +145,19 @@ export default function Topbar() {
                 logout();
                 navigate("/");
               }}
+              whileTap={tapScale}
             >
               <LogOutIcon />
-            </button>
+            </motion.button>
           </>
         ) : (
           <>
             <Link to="/login" className="navbar-link topbar-signin-link">
               Sign in
             </Link>
-            <Link to="/register" className="btn btn-primary">
-              <UserIcon width={15} height={15} /> Register
-            </Link>
+            <MotionLink to="/register" className="btn btn-primary" whileTap={tapScale}>
+              <UserIcon width={15} height={15} /> <span>Register</span>
+            </MotionLink>
           </>
         )}
       </div>

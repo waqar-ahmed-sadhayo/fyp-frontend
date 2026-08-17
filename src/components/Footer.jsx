@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { DISEASE_META } from "../diseaseConfig";
 import logo from "../assets/logo.png";
+import Reveal from "./Reveal";
+import { fadeUp } from "../lib/motion";
 
 // No social icons here on purpose — there's no real, actively-maintained
 // social presence for this project to link to yet, and a row of icons
@@ -13,7 +15,7 @@ export default function Footer() {
 
   return (
     <footer className="site-footer">
-      <div className="footer-inner">
+      <Reveal as="div" className="footer-inner" variants={fadeUp}>
         <div className="footer-top">
           <div className="footer-col">
             <div className="footer-brand">
@@ -79,7 +81,7 @@ export default function Footer() {
           <span>© {new Date().getFullYear()} Multi-Disease Detection System — Final Year Project</span>
           <span>Educational use only, not a certified medical device</span>
         </div>
-      </div>
+      </Reveal>
     </footer>
   );
 }

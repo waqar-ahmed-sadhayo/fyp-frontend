@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { motion } from "motion/react";
 import { useAuth } from "../context/AuthContext";
 import AuthLayout from "../components/AuthLayout";
+import { hoverLift, tapScale } from "../lib/motion";
 
 export default function Login() {
   const { login, sessionExpired } = useAuth();
@@ -58,9 +60,14 @@ export default function Login() {
             <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••" />
           </div>
-          <button className="btn btn-primary btn-block" disabled={busy}>
+          <motion.button
+            className="btn btn-primary btn-block"
+            disabled={busy}
+            whileHover={busy ? undefined : hoverLift}
+            whileTap={busy ? undefined : tapScale}
+          >
             {busy ? "Signing in…" : "Sign in"}
-          </button>
+          </motion.button>
         </form>
         <p className="auth-foot">
           No account yet? <Link to="/register">Create one</Link>

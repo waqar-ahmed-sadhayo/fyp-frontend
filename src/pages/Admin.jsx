@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 import { api } from "../api/client";
 import { useAuth } from "../context/AuthContext";
+import Reveal, { StaggerGroup } from "../components/Reveal";
+import { fadeUp, hoverLift, tapScale } from "../lib/motion";
 import { BadgeCheckIcon, LayersIcon, ShieldIcon, UserIcon } from "../components/Icons";
 
 export default function Admin() {
@@ -51,12 +54,12 @@ export default function Admin() {
 
   return (
     <div className="shell-inner">
-      <div className="section-head">
+      <Reveal as="div" className="section-head">
         <div>
           <p className="eyebrow">Admin</p>
           <h2>User accounts</h2>
         </div>
-      </div>
+      </Reveal>
       <p style={{ color: "var(--muted)", marginTop: 4 }}>
         Every account that has registered on this deployment, and how many
         screenings each has run.
@@ -64,37 +67,37 @@ export default function Admin() {
 
       {error && <div className="error-banner">{error}</div>}
 
-      <div className="stats-strip">
-        <div className="s-item">
+      <StaggerGroup as="div" className="stats-strip">
+        <motion.div className="s-item" variants={fadeUp}>
           <span className="s-icon"><UserIcon /></span>
           <div className="s-num">{totalUsers ?? "—"}</div>
           <div className="s-label">Registered users</div>
-        </div>
-        <div className="s-item">
+        </motion.div>
+        <motion.div className="s-item" variants={fadeUp}>
           <span className="s-icon"><LayersIcon /></span>
           <div className="s-num">{totalScreenings ?? "—"}</div>
           <div className="s-label">Screenings run, all users</div>
-        </div>
-        <div className="s-item">
+        </motion.div>
+        <motion.div className="s-item" variants={fadeUp}>
           <span className="s-icon"><ShieldIcon /></span>
           <div className="s-num">{totalAdmins ?? "—"}</div>
           <div className="s-label">Admin accounts</div>
-        </div>
-        <div className="s-item">
+        </motion.div>
+        <motion.div className="s-item" variants={fadeUp}>
           <span className="s-icon"><BadgeCheckIcon /></span>
           <div className="s-num">
             {users ? users.filter((u) => u.email_verified).length : "—"}
           </div>
           <div className="s-label">Verified emails</div>
-        </div>
-      </div>
+        </motion.div>
+      </StaggerGroup>
 
       {users === null ? null : users.length === 0 ? (
-        <div className="empty-state card" style={{ marginTop: 20 }}>
+        <Reveal as="div" className="empty-state card" style={{ marginTop: 20 }}>
           <h3>No registered users yet</h3>
-        </div>
+        </Reveal>
       ) : (
-        <div className="card" style={{ marginTop: 32, overflowX: "auto" }}>
+        <Reveal as="div" className="card" style={{ marginTop: 32, overflowX: "auto" }}>
           <table className="history-table">
             <thead>
               <tr>
@@ -127,22 +130,24 @@ export default function Admin() {
                     )}
                   </td>
                   <td>
-                    <button
+                    <motion.button
                       type="button"
                       className={u.is_admin ? "btn btn-danger-ghost" : "btn btn-ghost"}
                       style={{ padding: "6px 14px", fontSize: 12.5 }}
                       disabled={busyId === u.id || u.id === user.id}
                       title={u.id === user.id ? "You can't change your own admin status here" : undefined}
                       onClick={() => toggleAdmin(u)}
+                      whileHover={busyId === u.id || u.id === user.id ? undefined : hoverLift}
+                      whileTap={busyId === u.id || u.id === user.id ? undefined : tapScale}
                     >
                       {busyId === u.id ? "…" : u.is_admin ? "Remove admin" : "Make admin"}
-                    </button>
+                    </motion.button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
+        </Reveal>
       )}
     </div>
   );

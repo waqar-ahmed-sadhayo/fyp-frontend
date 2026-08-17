@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "motion/react";
 import { useAuth } from "../context/AuthContext";
 import AuthLayout from "../components/AuthLayout";
+import { hoverLift, tapScale } from "../lib/motion";
 
 export default function Register() {
   const { register } = useAuth();
@@ -48,9 +50,14 @@ export default function Register() {
             <input type="password" required minLength={8} value={password}
               onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
           </div>
-          <button className="btn btn-primary btn-block" disabled={busy}>
+          <motion.button
+            className="btn btn-primary btn-block"
+            disabled={busy}
+            whileHover={busy ? undefined : hoverLift}
+            whileTap={busy ? undefined : tapScale}
+          >
             {busy ? "Creating account…" : "Create account"}
-          </button>
+          </motion.button>
         </form>
         <p className="auth-foot">
           Already registered? <Link to="/login">Sign in</Link>
