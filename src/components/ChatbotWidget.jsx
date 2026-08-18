@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import ReactMarkdown from "react-markdown";
 import { api } from "../api/client";
+import { useAuth } from "../context/AuthContext";
 import { hoverLift, tapScale } from "../lib/motion";
 import { AlertTriangleIcon, ChatbotMascotIcon, DoctorIcon, SendIcon } from "./Icons";
 
@@ -28,6 +30,7 @@ function loadHistory() {
 }
 
 export default function ChatbotWidget() {
+  const { user } = useAuth();
   const reduceMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState(loadHistory);
@@ -159,27 +162,37 @@ export default function ChatbotWidget() {
               )}
             </div>
 
-            <div className="chatbot-input-row">
-              <textarea
-                rows={1}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={onKeyDown}
-                placeholder="Apna sawaal likhein…"
-                disabled={busy}
-              />
-              <motion.button
-                type="button"
-                className="chatbot-send"
-                onClick={send}
-                disabled={busy || !input.trim()}
-                whileHover={busy || !input.trim() ? undefined : hoverLift}
-                whileTap={busy || !input.trim() ? undefined : tapScale}
-                aria-label="Send"
-              >
-                <SendIcon width={16} height={16} />
-              </motion.button>
-            </div>
+            {user ? (
+              <div className="chatbot-input-row">
+                <textarea
+                  rows={1}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={onKeyDown}
+                  placeholder="Apna sawaal likhein…"
+                  disabled={busy}
+                />
+                <motion.button
+                  type="button"
+                  className="chatbot-send"
+                  onClick={send}
+                  disabled={busy || !input.trim()}
+                  whileHover={busy || !input.trim() ? undefined : hoverLift}
+                  whileTap={busy || !input.trim() ? undefined : tapScale}
+                  aria-label="Send"
+                >
+                  <SendIcon width={16} height={16} />
+                </motion.button>
+              </div>
+            ) : (
+              <div className="chatbot-signin-prompt">
+                <p>Sawaal poochne ke liye sign in karein.</p>
+                <div className="chatbot-signin-actions">
+                  <Link to="/login" className="btn btn-primary btn-sm">Sign in</Link>
+                  <Link to="/register" className="btn btn-ghost btn-sm">Create account</Link>
+                </div>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

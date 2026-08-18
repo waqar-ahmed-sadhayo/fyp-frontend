@@ -7,6 +7,7 @@ import { DISEASE_META } from "../diseaseConfig";
 import ScreeningCard from "../components/ScreeningCard";
 import DashboardPreview from "../components/DashboardPreview";
 import Reveal, { StaggerGroup } from "../components/Reveal";
+import ChatbotWidget from "../components/ChatbotWidget";
 import { fadeUp, scaleIn, hoverLift, tapScale } from "../lib/motion";
 import {
   ArrowRightIcon,
@@ -719,6 +720,7 @@ export default function Landing() {
           </div>
         </Reveal>
       </div>
+      <ChatbotWidget />
     </>
   );
 }
