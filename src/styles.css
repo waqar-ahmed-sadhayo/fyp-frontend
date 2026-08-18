@@ -1557,12 +1557,14 @@ button, input, select { font-family: inherit; font-size: inherit; }
   gap: 14px;
   margin-top: 24px;
 }
+@media (max-width: 560px) { .admin-filter-row { flex-direction: column; align-items: stretch; gap: 12px; } }
 .admin-user-search {
   max-width: 320px;
   margin: 0;
   flex: 1 1 240px;
 }
 @media (max-width: 900px) { .admin-user-search { display: flex; } }
+@media (max-width: 560px) { .admin-user-search { max-width: none; } }
 .admin-filter-toggle {
   display: flex;
   align-items: center;
@@ -1590,6 +1592,11 @@ button, input, select { font-family: inherit; font-size: inherit; }
   gap: 14px;
   padding: 14px 16px;
   border-top: 1px solid var(--line);
+}
+@media (max-width: 480px) {
+  .admin-pagination { flex-direction: column; align-items: stretch; }
+  .admin-page-size { justify-content: space-between; }
+  .admin-page-nav { justify-content: center; }
 }
 .admin-page-size {
   display: flex;
