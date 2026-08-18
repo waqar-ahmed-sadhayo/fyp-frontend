@@ -307,6 +307,89 @@ export function RobotIcon(props) {
   );
 }
 
+export function DoctorIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M6 3v4.2a2.6 2.6 0 0 0 5.2 0V3" />
+      <path d="M8.6 9.8V13a4.6 4.6 0 0 0 9.2 0v-2.3" />
+      <circle cx="17.8" cy="9.3" r="1.7" />
+      <circle cx="8.6" cy="18.7" r="2.3" />
+    </svg>
+  );
+}
+
+// Chatbot mascot — a small illustrative robot, not part of the base
+// 24x24/currentColor line-icon set above. Uses its own gradients/fixed
+// palette (glossy "3D" plastic look) since a single-stroke line icon reads
+// as too flat/generic for a launcher button meant to feel like a character,
+// not a navigational glyph.
+export function ChatbotMascotIcon({ width = 64, height = 64, ...props }) {
+  return (
+    <svg viewBox="0 0 100 100" width={width} height={height} {...props}>
+      <defs>
+        <linearGradient id="mascotHead" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#F1F0FE" />
+          <stop offset="1" stopColor="#A7A2EE" />
+        </linearGradient>
+        <linearGradient id="mascotBody" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#DDDAFB" />
+          <stop offset="1" stopColor="#7A72E3" />
+        </linearGradient>
+        <linearGradient id="mascotFace" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#3A3A55" />
+          <stop offset="1" stopColor="#191927" />
+        </linearGradient>
+        <radialGradient id="mascotRing" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0.55" stopColor="#EF4444" stopOpacity="0" />
+          <stop offset="0.75" stopColor="#EF4444" stopOpacity="0.9" />
+          <stop offset="1" stopColor="#EF4444" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+
+      {/* antenna + signal rings */}
+      <circle cx="50" cy="20" r="15" fill="url(#mascotRing)" opacity="0.7" />
+      <circle cx="50" cy="20" r="9" fill="url(#mascotRing)" opacity="0.85" />
+      <line x1="50" y1="20" x2="50" y2="34" stroke="#37374A" strokeWidth="2.4" strokeLinecap="round" />
+      <circle cx="50" cy="18" r="4.2" fill="#EF4444" />
+      <circle cx="48.5" cy="16.5" r="1.3" fill="#FCA5A5" />
+
+      {/* ears */}
+      <ellipse cx="18" cy="47" rx="7" ry="9" fill="url(#mascotHead)" stroke="#8B85D9" strokeWidth="1" />
+      <ellipse cx="82" cy="47" rx="7" ry="9" fill="url(#mascotHead)" stroke="#8B85D9" strokeWidth="1" />
+
+      {/* head */}
+      <path d="M22 46a28 24 0 0 1 56 0v6a28 22 0 0 1-56 0z" fill="url(#mascotHead)" stroke="#7A72E3" strokeWidth="1.3" />
+      <ellipse cx="38" cy="30" rx="11" ry="5" fill="#FFFFFF" opacity="0.45" />
+
+      {/* face plate */}
+      <path d="M32 44a18 13 0 0 1 36 0v4a18 12 0 0 1-36 0z" fill="url(#mascotFace)" />
+      <ellipse cx="41" cy="46" rx="4.4" ry="5.6" fill="#8FF3E0" />
+      <ellipse cx="59" cy="46" rx="4.4" ry="5.6" fill="#8FF3E0" />
+      <ellipse cx="41" cy="44.3" rx="1.6" ry="2" fill="#FFFFFF" />
+      <ellipse cx="59" cy="44.3" rx="1.6" ry="2" fill="#FFFFFF" />
+      <path d="M43 55.5c4.2 3 9.8 3 14 0" stroke="#8FF3E0" strokeWidth="2" strokeLinecap="round" fill="none" />
+
+      {/* arms */}
+      <path d="M23 76c-6 1-10 5-10 11" stroke="#5B54C9" strokeWidth="7" strokeLinecap="round" fill="none" />
+      <circle cx="12.5" cy="88" r="5.4" fill="url(#mascotBody)" stroke="#7A72E3" strokeWidth="1" />
+      <path d="M78 76c7-2 13-9 12-18" stroke="#5B54C9" strokeWidth="7" strokeLinecap="round" fill="none" />
+      <circle cx="90.5" cy="57" r="5.6" fill="url(#mascotBody)" stroke="#7A72E3" strokeWidth="1" />
+
+      {/* body */}
+      <path d="M27 72c0-5 10-10 23-10s23 5 23 10v6c0 12-10.3 21-23 21S27 90 27 78z"
+            fill="url(#mascotBody)" stroke="#5B54C9" strokeWidth="1.3" />
+      <ellipse cx="40" cy="70" rx="9" ry="3.4" fill="#FFFFFF" opacity="0.35" />
+      <circle cx="63" cy="72" r="1.7" fill="#4B4498" opacity="0.6" />
+      <circle cx="68" cy="76" r="1.7" fill="#4B4498" opacity="0.6" />
+
+      {/* medical cross badge */}
+      <rect x="41" y="76" width="18" height="18" rx="5" fill="#EF4444" />
+      <rect x="48.3" y="79.3" width="3.4" height="11.4" rx="1.2" fill="#FFFFFF" />
+      <rect x="44.3" y="83.3" width="11.4" height="3.4" rx="1.2" fill="#FFFFFF" />
+    </svg>
+  );
+}
+
 const DISEASE_ICONS = {
   heart: HeartIcon,
   diabetes: DropletIcon,

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import ReactMarkdown from "react-markdown";
 import { api } from "../api/client";
 import { hoverLift, tapScale } from "../lib/motion";
-import { AlertTriangleIcon, RobotIcon, SendIcon } from "./Icons";
+import { AlertTriangleIcon, ChatbotMascotIcon, DoctorIcon, SendIcon } from "./Icons";
 
 const STORAGE_KEY = "mdds_chat_history";
 
@@ -28,6 +28,7 @@ function loadHistory() {
 }
 
 export default function ChatbotWidget() {
+  const reduceMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState(loadHistory);
   const [input, setInput] = useState("");
@@ -90,11 +91,13 @@ export default function ChatbotWidget() {
         type="button"
         className="chatbot-fab"
         onClick={() => setOpen((o) => !o)}
+        animate={!reduceMotion && !open ? { y: [0, -7, 0] } : { y: 0 }}
+        transition={!reduceMotion && !open ? { duration: 2.2, repeat: Infinity, ease: "easeInOut" } : { duration: 0.2 }}
         whileHover={hoverLift}
         whileTap={tapScale}
         aria-label={open ? "Close assistant" : "Open assistant"}
       >
-        <RobotIcon width={26} height={26} />
+        <ChatbotMascotIcon width={68} height={68} />
       </motion.button>
 
       <AnimatePresence>
@@ -107,7 +110,7 @@ export default function ChatbotWidget() {
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="chatbot-header">
-              <span className="chatbot-header-icon"><RobotIcon width={18} height={18} /></span>
+              <span className="chatbot-header-icon"><DoctorIcon width={18} height={18} /></span>
               <div className="chatbot-header-copy">
                 <p className="chatbot-header-title">MDDS Assistant</p>
                 <p className="chatbot-header-sub">Website guide &amp; general health Q&amp;A</p>
