@@ -144,6 +144,9 @@ export default function Topbar() {
             transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
           >
             {navLinks}
+            {user && <NavLink to="/history" className={navLinkClass}>History</NavLink>}
+            {user && <NavLink to="/profile" className={navLinkClass}>Profile</NavLink>}
+            {user?.is_admin && <NavLink to="/admin" className={navLinkClass}>Admin</NavLink>}
             {!user && (
               <Link to="/login" className={navLinkClass({ isActive: false })}>Sign in</Link>
             )}
