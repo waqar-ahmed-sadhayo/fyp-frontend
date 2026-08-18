@@ -7,7 +7,7 @@ import { api } from "../api/client";
 import { DISEASE_META } from "../diseaseConfig";
 import { tapScale } from "../lib/motion";
 import {
-  ClipboardIcon, LogOutIcon, MoonIcon, SearchIcon, SunIcon, UserIcon,
+  ClipboardIcon, CloseIcon, LogOutIcon, MenuIcon, MoonIcon, SearchIcon, SunIcon, UserIcon,
 } from "./Icons";
 import logo from "../assets/logo.png";
 
@@ -95,26 +95,61 @@ export default function Topbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [historyCount, setHistoryCount] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!user) { setHistoryCount(0); return; }
     api.history().then((list) => setHistoryCount(list.length)).catch(() => {});
   }, [user, location.pathname]);
 
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  const navLinks = (
+    <>
+      <NavLink to="/" end className={navLinkClass}>Home</NavLink>
+      {user && <NavLink to="/dashboard" className={navLinkClass}>Screenings</NavLink>}
+      <NavLink to="/education" className={navLinkClass}>Learn</NavLink>
+      {user && <NavLink to="/feedback" className={navLinkClass}>Feedback</NavLink>}
+    </>
+  );
+
   return (
     <header className="topbar">
       <div className="topbar-left">
+        <button
+          type="button"
+          className="mobile-menu-btn"
+          onClick={() => setMobileMenuOpen((v) => !v)}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileMenuOpen}
+        >
+          {mobileMenuOpen ? <CloseIcon width={20} height={20} /> : <MenuIcon width={20} height={20} />}
+        </button>
         <Link to="/" className="brand-mark">
           <img src={logo} alt="Multi-Disease Detection System" className="brand-logo" />
         </Link>
 
-        <nav className="navbar-links">
-          <NavLink to="/" end className={navLinkClass}>Home</NavLink>
-          {user && <NavLink to="/dashboard" className={navLinkClass}>Screenings</NavLink>}
-          <NavLink to="/education" className={navLinkClass}>Learn</NavLink>
-          {user && <NavLink to="/feedback" className={navLinkClass}>Feedback</NavLink>}
-        </nav>
+        <nav className="navbar-links">{navLinks}</nav>
       </div>
+
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.nav
+            className="mobile-menu-panel"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {navLinks}
+            {!user && (
+              <Link to="/login" className={navLinkClass({ isActive: false })}>Sign in</Link>
+            )}
+          </motion.nav>
+        )}
+      </AnimatePresence>
 
       <HeaderSearch user={user} navigate={navigate} />
 
