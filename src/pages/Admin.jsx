@@ -4,7 +4,9 @@ import { api } from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import Reveal, { StaggerGroup } from "../components/Reveal";
 import { fadeUp, hoverLift, tapScale } from "../lib/motion";
-import { BadgeCheckIcon, LayersIcon, SearchIcon, ShieldIcon, UserIcon } from "../components/Icons";
+import { ArrowRightIcon, BadgeCheckIcon, LayersIcon, SearchIcon, ShieldIcon, UserIcon } from "../components/Icons";
+
+const PAGE_SIZE_OPTIONS = [5, 10, 15, 20];
 
 // example.com is IANA/RFC-2606-reserved for documentation and testing —
 // no real signup ever legitimately uses it, which makes it a reliable
@@ -19,6 +21,8 @@ export default function Admin() {
   const [busyId, setBusyId] = useState(null);
   const [query, setQuery] = useState("");
   const [hideTestAccounts, setHideTestAccounts] = useState(true);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const load = () => api.adminUsers().then(setUsers).catch((e) => setError(e.message));
 
@@ -27,6 +31,10 @@ export default function Admin() {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [query, hideTestAccounts, pageSize]);
 
   const toggleAdmin = async (target) => {
     const makingAdmin = !target.is_admin;
@@ -81,6 +89,10 @@ export default function Admin() {
     return true;
   }) ?? null;
   const hiddenCount = users && filteredUsers ? users.length - filteredUsers.length : 0;
+
+  const totalPages = filteredUsers ? Math.max(1, Math.ceil(filteredUsers.length / pageSize)) : 1;
+  const currentPage = Math.min(page, totalPages);
+  const pagedUsers = filteredUsers?.slice((currentPage - 1) * pageSize, currentPage * pageSize) ?? null;
 
   const totalUsers = filteredUsers?.length ?? null;
   const totalScreenings = filteredUsers?.reduce((sum, u) => sum + (u.screening_count || 0), 0) ?? null;
@@ -167,7 +179,7 @@ export default function Admin() {
               </tr>
             </thead>
             <tbody>
-              {filteredUsers.map((u) => (
+              {pagedUsers.map((u) => (
                 <tr key={u.id}>
                   <td>{u.full_name}</td>
                   <td className="mono" style={{ color: "var(--muted)" }}>{u.email}</td>
@@ -216,6 +228,38 @@ export default function Admin() {
               ))}
             </tbody>
           </table>
+
+          <div className="admin-pagination">
+            <label className="admin-page-size">
+              Rows per page
+              <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
+                {PAGE_SIZE_OPTIONS.map((n) => (
+                  <option key={n} value={n}>{n}</option>
+                ))}
+              </select>
+            </label>
+            <div className="admin-page-nav">
+              <button
+                type="button"
+                className="btn btn-ghost admin-page-btn"
+                disabled={currentPage <= 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                aria-label="Previous page"
+              >
+                <ArrowRightIcon width={14} height={14} style={{ transform: "rotate(180deg)" }} />
+              </button>
+              <span className="admin-page-label">Page {currentPage} of {totalPages}</span>
+              <button
+                type="button"
+                className="btn btn-ghost admin-page-btn"
+                disabled={currentPage >= totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                aria-label="Next page"
+              >
+                <ArrowRightIcon width={14} height={14} />
+              </button>
+            </div>
+          </div>
         </Reveal>
       )}
     </div>

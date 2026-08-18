@@ -1582,6 +1582,37 @@ button, input, select { font-family: inherit; font-size: inherit; }
   border-radius: var(--radius-pill);
 }
 
+.admin-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 14px 16px;
+  border-top: 1px solid var(--line);
+}
+.admin-page-size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.admin-page-size select {
+  padding: 6px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+}
+.admin-page-nav { display: flex; align-items: center; gap: 12px; }
+.admin-page-btn { padding: 7px 9px; }
+.admin-page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.admin-page-label { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
 .history-table { width: 100%; border-collapse: collapse; }
 .history-table th {
   text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
