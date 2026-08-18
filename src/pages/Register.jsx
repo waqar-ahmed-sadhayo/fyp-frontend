@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import { useAuth } from "../context/AuthContext";
 import AuthLayout from "../components/AuthLayout";
 import { hoverLift, tapScale } from "../lib/motion";
+import { EyeIcon, EyeOffIcon } from "../components/Icons";
 
 export default function Register() {
   const { register } = useAuth();
@@ -11,6 +12,7 @@ export default function Register() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -47,8 +49,19 @@ export default function Register() {
           </div>
           <div className="field">
             <label>Password <span className="hint">min 8 characters</span></label>
-            <input type="password" required minLength={8} value={password}
-              onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
+            <div className="password-field-wrap">
+              <input type={showPassword ? "text" : "password"} required minLength={8} value={password}
+                onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOffIcon width={18} height={18} /> : <EyeIcon width={18} height={18} />}
+              </button>
+            </div>
           </div>
           <motion.button
             className="btn btn-primary btn-block"

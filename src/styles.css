@@ -581,6 +581,28 @@ button, input, select { font-family: inherit; font-size: inherit; }
   gap: 4px 20px;
 }
 
+.password-field-wrap { position: relative; }
+.password-field-wrap input { padding-right: 42px; }
+.password-toggle-btn {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: color 0.12s ease, background-color 0.12s ease;
+}
+.password-toggle-btn:hover { color: var(--brand); background: var(--surface-muted); }
+.password-toggle-btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+
 .error-banner {
   background: var(--risk-high-wash);
   color: var(--risk-high);
