@@ -4,13 +4,21 @@ import { api } from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import Reveal, { StaggerGroup } from "../components/Reveal";
 import { fadeUp, hoverLift, tapScale } from "../lib/motion";
-import { BadgeCheckIcon, LayersIcon, ShieldIcon, UserIcon } from "../components/Icons";
+import { BadgeCheckIcon, LayersIcon, SearchIcon, ShieldIcon, UserIcon } from "../components/Icons";
+
+// example.com is IANA/RFC-2606-reserved for documentation and testing —
+// no real signup ever legitimately uses it, which makes it a reliable
+// (not just a today's-cleanup) signal for "this is a test account" rather
+// than a name/email substring guess that could hide a real user by accident.
+const isTestAccount = (u) => u.email.toLowerCase().endsWith("@example.com");
 
 export default function Admin() {
   const { user } = useAuth();
   const [users, setUsers] = useState(null);
   const [error, setError] = useState("");
   const [busyId, setBusyId] = useState(null);
+  const [query, setQuery] = useState("");
+  const [hideTestAccounts, setHideTestAccounts] = useState(true);
 
   const load = () => api.adminUsers().then(setUsers).catch((e) => setError(e.message));
 
@@ -66,9 +74,17 @@ export default function Admin() {
     );
   }
 
-  const totalUsers = users?.length ?? null;
-  const totalScreenings = users?.reduce((sum, u) => sum + (u.screening_count || 0), 0) ?? null;
-  const totalAdmins = users?.filter((u) => u.is_admin).length ?? null;
+  const q = query.trim().toLowerCase();
+  const filteredUsers = users?.filter((u) => {
+    if (hideTestAccounts && isTestAccount(u)) return false;
+    if (q && !u.full_name.toLowerCase().includes(q) && !u.email.toLowerCase().includes(q)) return false;
+    return true;
+  }) ?? null;
+  const hiddenCount = users && filteredUsers ? users.length - filteredUsers.length : 0;
+
+  const totalUsers = filteredUsers?.length ?? null;
+  const totalScreenings = filteredUsers?.reduce((sum, u) => sum + (u.screening_count || 0), 0) ?? null;
+  const totalAdmins = filteredUsers?.filter((u) => u.is_admin).length ?? null;
 
   return (
     <div className="shell-inner">
@@ -104,18 +120,41 @@ export default function Admin() {
         <motion.div className="s-item" variants={fadeUp}>
           <span className="s-icon"><BadgeCheckIcon /></span>
           <div className="s-num">
-            {users ? users.filter((u) => u.email_verified).length : "—"}
+            {filteredUsers ? filteredUsers.filter((u) => u.email_verified).length : "—"}
           </div>
           <div className="s-label">Verified emails</div>
         </motion.div>
       </StaggerGroup>
 
-      {users === null ? null : users.length === 0 ? (
+      <div className="admin-filter-row">
+        <div className="header-search admin-user-search">
+          <SearchIcon className="header-search-icon" />
+          <input
+            type="text"
+            placeholder="Search by name or email…"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </div>
+        <label className="admin-filter-toggle">
+          <input
+            type="checkbox"
+            checked={hideTestAccounts}
+            onChange={(e) => setHideTestAccounts(e.target.checked)}
+          />
+          Hide test accounts (@example.com)
+        </label>
+        {hiddenCount > 0 && (
+          <span className="admin-filter-hidden-count">{hiddenCount} hidden</span>
+        )}
+      </div>
+
+      {filteredUsers === null ? null : filteredUsers.length === 0 ? (
         <Reveal as="div" className="empty-state card" style={{ marginTop: 20 }}>
-          <h3>No registered users yet</h3>
+          <h3>{users.length === 0 ? "No registered users yet" : "No accounts match this filter"}</h3>
         </Reveal>
       ) : (
-        <Reveal as="div" className="card" style={{ marginTop: 32, overflowX: "auto" }}>
+        <Reveal as="div" className="card" style={{ marginTop: 20, overflowX: "auto" }}>
           <table className="history-table">
             <thead>
               <tr>
@@ -128,7 +167,7 @@ export default function Admin() {
               </tr>
             </thead>
             <tbody>
-              {users.map((u) => (
+              {filteredUsers.map((u) => (
                 <tr key={u.id}>
                   <td>{u.full_name}</td>
                   <td className="mono" style={{ color: "var(--muted)" }}>{u.email}</td>
