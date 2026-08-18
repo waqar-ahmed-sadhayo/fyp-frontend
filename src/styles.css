@@ -1412,7 +1412,11 @@ button, input, select { font-family: inherit; font-size: inherit; }
 .explanation-block { margin-top: 4px; }
 .explanation-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .explanation-item { display: grid; grid-template-columns: 1fr 90px; align-items: center; gap: 10px; }
-.explanation-feature { font-size: 12px; color: var(--muted); font-family: var(--font-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* min-width:0 overrides the grid item's default auto min-width, which
+   otherwise sizes to the nowrap text's full length and pushes the whole
+   card wider than the viewport on mobile — text-overflow:ellipsis alone
+   doesn't stop that overflow inside a CSS grid track. */
+.explanation-feature { min-width: 0; font-size: 12px; color: var(--muted); font-family: var(--font-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .explanation-bar-track { height: 7px; border-radius: 4px; background: var(--surface-muted); overflow: hidden; }
 .explanation-bar { display: block; height: 100%; border-radius: 4px; }
 .explanation-legend { display: flex; gap: 18px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--muted); }
