@@ -37,6 +37,24 @@ export default function Admin() {
     }
   };
 
+  const deleteAccount = async (target) => {
+    if (!window.confirm(
+      `Permanently delete ${target.full_name} (${target.email})? This removes their account, ` +
+      `screening history, and feedback — this can't be undone.`,
+    )) return;
+
+    setError("");
+    setBusyId(target.id);
+    try {
+      await api.deleteUser(target.id);
+      setUsers((list) => list.filter((u) => u.id !== target.id));
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setBusyId(null);
+    }
+  };
+
   if (!user?.is_admin) {
     return (
       <div className="shell-inner">
@@ -129,7 +147,7 @@ export default function Admin() {
                       </span>
                     )}
                   </td>
-                  <td>
+                  <td style={{ display: "flex", gap: 8 }}>
                     <motion.button
                       type="button"
                       className={u.is_admin ? "btn btn-danger-ghost" : "btn btn-ghost"}
@@ -141,6 +159,18 @@ export default function Admin() {
                       whileTap={busyId === u.id || u.id === user.id ? undefined : tapScale}
                     >
                       {busyId === u.id ? "…" : u.is_admin ? "Remove admin" : "Make admin"}
+                    </motion.button>
+                    <motion.button
+                      type="button"
+                      className="btn btn-danger-ghost"
+                      style={{ padding: "6px 14px", fontSize: 12.5 }}
+                      disabled={busyId === u.id || u.id === user.id}
+                      title={u.id === user.id ? "You can't delete your own account here" : "Permanently delete this account"}
+                      onClick={() => deleteAccount(u)}
+                      whileHover={busyId === u.id || u.id === user.id ? undefined : hoverLift}
+                      whileTap={busyId === u.id || u.id === user.id ? undefined : tapScale}
+                    >
+                      Delete
                     </motion.button>
                   </td>
                 </tr>

@@ -161,6 +161,7 @@ export const api = {
   adminUsers: () => request("/admin/users"),
   setUserAdmin: (userId, isAdmin) =>
     request(`/admin/users/${userId}/admin`, { method: "PATCH", body: { is_admin: isAdmin } }),
+  deleteUser: (userId) => request(`/admin/users/${userId}`, { method: "DELETE" }),
 
   healthSuggestions: (resultId) =>
     request("/health-suggestions", { method: "POST", body: { result_id: resultId } }),
